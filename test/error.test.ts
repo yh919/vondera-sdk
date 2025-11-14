@@ -5,12 +5,16 @@ import { ApiClient } from "../src/client";
 
 const mock = new MockAdapter(axios);
 
+const API_BASE =
+  "https://us-central1-brands-61c3d.cloudfunctions.net/app-api/api/public";
+
 describe("Error handling", () => {
   it("normalizes axios errors with response", async () => {
+    const base = process.env.VONDERA_API_BASE || API_BASE;
     mock
-      .onGet("https://api.test/products")
+      .onGet(`${base}/products`)
       .reply(500, { message: "server error", code: "ERR" });
-    const client = new ApiClient({ apiKey: "k", baseURL: "https://api.test" });
+    const client = new ApiClient({ apiKey: "k" });
 
     try {
       await client.products.list();
@@ -25,10 +29,10 @@ describe("Error handling", () => {
 
   it("handles network/no-response errors gracefully", async () => {
     // Simulate network error by not providing a reply and forcing networkError
-    mock.onGet("https://api.test/products").networkError();
+    const base2 = process.env.VONDERA_API_BASE || API_BASE;
+    mock.onGet(`${base2}/products`).networkError();
     const client = new ApiClient({
       apiKey: process.env.VONDERA_API_KEY || "k",
-      baseURL: process.env.VONDERA_API_BASE || "https://api.test",
     });
 
     try {

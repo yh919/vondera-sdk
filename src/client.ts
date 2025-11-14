@@ -33,7 +33,20 @@ export class ApiClient {
     if (!options || !options.apiKey)
       throw new Error("ApiClient requires an apiKey");
 
-    this.http = createHttpClient(options);
+    // Ignore any user-provided baseURL: the SDK controls the base URL globally.
+    if ((options as any).baseURL) {
+      // Warn in development to help consumers migrate. Do not throw to remain
+      // resilient for existing consumers, but the value will be ignored.
+      // eslint-disable-next-line no-console
+      console.warn(
+        "'baseURL' option is ignored — the vondera-sdk uses a package-default base URL."
+      );
+    }
+
+    this.http = createHttpClient({
+      apiKey: options.apiKey,
+      timeout: options.timeout,
+    });
 
     this.wishlist = new WishlistEndpoint(this.http);
     this.products = new ProductsEndpoint(this.http);

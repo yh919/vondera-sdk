@@ -3,22 +3,24 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { ApiClient } from "../src/client";
 
-let mock: MockAdapter;
+// Tests create a MockAdapter attached to the ApiClient's internal axios instance
+// so that requests made via the SDK (which uses axios.create) are intercepted.
 
-beforeEach(() => {
-  mock = new MockAdapter(axios);
-});
+const API_BASE =
+  "https://us-central1-brands-61c3d.cloudfunctions.net/app-api/api/public";
 
 describe("Endpoints - integration (mocked)", () => {
   it("wishlist add/get/remove flows", async () => {
     const client = new ApiClient({
       apiKey: process.env.VONDERA_API_KEY || "key-123",
-      baseURL: process.env.VONDERA_API_BASE || "https://api.test",
     });
+    const mock = new MockAdapter((client as any).http);
 
     // Add
-    mock.onPost(`${process.env.VONDERA_API_BASE || "https://api.test"}/customer/wishlist`).reply((config) => {
-      expect(config.headers!["x-api-key"]).toBe(process.env.VONDERA_API_KEY || "key-123");
+    mock.onPost(`/customer/wishlist`).reply((config) => {
+      expect(config.headers!["x-api-key"]).toBe(
+        process.env.VONDERA_API_KEY || "key-123"
+      );
       const body = JSON.parse(config.data || "{}");
       expect(body.productId).toBe("2032");
       return [
@@ -31,8 +33,10 @@ describe("Endpoints - integration (mocked)", () => {
     expect(addRes.status).toBe(200);
 
     // Get
-    mock.onGet(`${process.env.VONDERA_API_BASE || "https://api.test"}/customer/wishlist`).reply((config) => {
-      expect(config.headers!["x-api-key"]).toBe(process.env.VONDERA_API_KEY || "key-123");
+    mock.onGet(`/customer/wishlist`).reply((config) => {
+      expect(config.headers!["x-api-key"]).toBe(
+        process.env.VONDERA_API_KEY || "key-123"
+      );
       return [
         200,
         {
@@ -54,8 +58,10 @@ describe("Endpoints - integration (mocked)", () => {
     expect(getRes.data?.items).toBeDefined();
 
     // Remove
-    mock.onDelete(`${process.env.VONDERA_API_BASE || "https://api.test"}/customer/wishlist`).reply((config) => {
-      expect(config.headers!["x-api-key"]).toBe(process.env.VONDERA_API_KEY || "key-123");
+    mock.onDelete(`/customer/wishlist`).reply((config) => {
+      expect(config.headers!["x-api-key"]).toBe(
+        process.env.VONDERA_API_KEY || "key-123"
+      );
       const body = JSON.parse(config.data || "{}");
       expect(body.productId).toBe("2032");
       return [
@@ -69,32 +75,31 @@ describe("Endpoints - integration (mocked)", () => {
   });
 
   it("products list and detail", async () => {
-    const client = new ApiClient({ apiKey: process.env.VONDERA_API_KEY || "k", baseURL: process.env.VONDERA_API_BASE || "https://api.test" });
+    const client = new ApiClient({
+      apiKey: process.env.VONDERA_API_KEY || "k",
+    });
+    const mock = new MockAdapter((client as any).http);
 
-    mock
-      .onGet(`${process.env.VONDERA_API_BASE || "https://api.test"}/products`)
-      .reply(200, {
-        status: 200,
-        message: "Success",
-        data: {
-          items: [],
-          isLastPage: true,
-          nextPageNumber: null,
-          currentPage: 1,
-          totalPages: 1,
-        },
-      });
+    mock.onGet(`/products`).reply(200, {
+      status: 200,
+      message: "Success",
+      data: {
+        items: [],
+        isLastPage: true,
+        nextPageNumber: null,
+        currentPage: 1,
+        totalPages: 1,
+      },
+    });
 
     const list = await client.products.list({ pageNo: 1, limit: 5 });
     expect(list.status).toBe(200);
 
-    mock
-      .onGet(`${process.env.VONDERA_API_BASE || "https://api.test"}/products/single/0300`)
-      .reply(200, {
-        status: 200,
-        message: "Success",
-        data: { product: { id: "0300", price: 100 } },
-      });
+    mock.onGet(`/products/single/0300`).reply(200, {
+      status: 200,
+      message: "Success",
+      data: { product: { id: "0300", price: 100 } },
+    });
 
     const detail = await client.products.getById("0300");
     expect(detail.status).toBe(200);
@@ -102,15 +107,18 @@ describe("Endpoints - integration (mocked)", () => {
   });
 
   it("categories list and single", async () => {
-    const client = new ApiClient({ apiKey: process.env.VONDERA_API_KEY || "k", baseURL: process.env.VONDERA_API_BASE || "https://api.test" });
+    const client = new ApiClient({
+      apiKey: process.env.VONDERA_API_KEY || "k",
+    });
+    const mock = new MockAdapter((client as any).http);
     mock
-      .onGet(`${process.env.VONDERA_API_BASE || "https://api.test"}/category`)
+      .onGet(`/category`)
       .reply(200, { status: 200, message: "Success", data: [] });
     const cats = await client.categories.list();
     expect(cats.status).toBe(200);
 
     mock
-      .onGet("https://api.test/category/single/abc")
+      .onGet(`/category/single/abc`)
       .reply(200, { status: 200, message: "Success", data: { id: "abc" } });
     const single = await client.categories.getById("abc");
     expect(single.status).toBe(200);
@@ -118,8 +126,11 @@ describe("Endpoints - integration (mocked)", () => {
   });
 
   it("auth login/signup", async () => {
-    const client = new ApiClient({ apiKey: process.env.VONDERA_API_KEY || "k", baseURL: process.env.VONDERA_API_BASE || "https://api.test" });
-    mock.onPost(`${process.env.VONDERA_API_BASE || "https://api.test"}/customer/login`).reply((config) => {
+    const client = new ApiClient({
+      apiKey: process.env.VONDERA_API_KEY || "k",
+    });
+    const mock = new MockAdapter((client as any).http);
+    mock.onPost(`/customer/login`).reply((config) => {
       const body = JSON.parse(config.data || "{}");
       expect(body.email).toBe("a@b.c");
       return [

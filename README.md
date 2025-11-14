@@ -26,8 +26,6 @@ import { ApiClient } from "vondera-sdk";
 
 const client = new ApiClient({
   apiKey: process.env.VONDERA_API_KEY || "your-api-key",
-  // optional: override the API base URL
-  // baseURL: "https://api.your-vondera-instance.com/api/public",
   timeout: 15000,
 });
 
@@ -64,10 +62,13 @@ Script tag (IIFE global):
 
 ## Usage notes
 
-- The SDK automatically sends `x-api-key` header. Provide a valid store API key.
-- Methods return a consistent response wrapper (use `.data` for payloads).
-- The `ApiClient` exposes an `http` property with the underlying Axios instance
-  for advanced customization (interceptors, timeouts, etc.).
+-- The SDK automatically sends `x-api-key` header. Provide a valid store API key.
+-- Methods return a consistent response wrapper (use `.data` for payloads).
+-- The `ApiClient` exposes an `http` property with the underlying Axios instance
+for advanced customization (interceptors, timeouts, etc.).
+-- The SDK controls the API `baseURL` globally. Do not pass `baseURL` to
+`ApiClient`. The package uses a built-in default base URL or the
+`VONDERA_API_BASE` environment variable when present.
 
 ## API surface (high level)
 
