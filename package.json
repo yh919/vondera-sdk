@@ -36,6 +36,17 @@
   ],
   "author": "Vondera",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yh919/vondera-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yh919/vondera-sdk/issues"
+  },
+  "homepage": "https://github.com/yh919/vondera-sdk#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "axios-mock-adapter": "^1.21.2",

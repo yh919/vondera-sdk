@@ -1,0 +1,10 @@
+node_modules/
+src/
+test/
+examples/
+.github/
+.vscode/
+tsconfig.json
+README.md
+*.log
+!.github/workflows/publish.yml
