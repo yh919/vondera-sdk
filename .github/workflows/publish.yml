@@ -18,6 +18,8 @@ jobs:
         with:
           node-version: 18
           registry-url: https://registry.npmjs.org
+          # ensure npm auth is configured using the provided secret
+          auth-token: ${{ secrets.NPM_TOKEN }}
       - name: Install dependencies
         run: npm ci
       - name: Build
@@ -25,4 +27,7 @@ jobs:
       - name: Publish to npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+        run: |
+          # As a safety, ensure npm auth token is available to npm config
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          npm publish --access public

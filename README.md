@@ -289,8 +289,11 @@ try {
 This package uses `tsup` to build ESM and CJS outputs.
 
 ```bash
-npm run build
+# or
+npm install vondera-sdk
 ```
+
+pnpm add vondera-sdk
 
 ## Testing
 
@@ -300,19 +303,27 @@ Tests are written using `vitest`.
 npm test
 ```
 
+import { ApiClient } from "vondera-sdk";
+
 ## Contributing
 
 If you find missing endpoints or types, please open a PR with additions to `src/endpoints` and `src/types.ts`.
 
 ---
 
+# or
+
+npm install vondera-sdk
+
 ## Browser example (real request)
 
+pnpm add vondera-sdk
 There's a minimal browser example under `examples/browser/` that performs a real GET request to the public API using `fetch` and the required `x-api-key` header.
 
 Steps to run the example locally:
 
 1. Copy the example config and set your real values:
+   import { ApiClient } from "vondera-sdk";
 
 ```powershell
 copy .\examples\browser\config.example.js .\examples\browser\config.js
