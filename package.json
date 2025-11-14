@@ -1,5 +1,5 @@
 {
-  "name": "@vondera/sdk",
+  "name": "vondera-sdk",
   "version": "0.1.2",
   "description": "Vondera Public API SDK for JavaScript/TypeScript",
   "main": "dist/index.js",
