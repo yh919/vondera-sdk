@@ -1,0 +1,50 @@
+{
+  "name": "@vondera/sdk",
+  "version": "0.1.0",
+  "description": "Vondera Public API SDK for JavaScript/TypeScript",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js",
+      "browser": "./dist/browser/vondera-sdk.mjs"
+    }
+  },
+  "browser": "./dist/browser/vondera-sdk.mjs",
+  "unpkg": "./dist/browser/vondera-sdk.iife.js",
+  "jsdelivr": "./dist/browser/vondera-sdk.iife.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "build:browser": "esbuild src/index.ts --bundle --platform=browser --format=iife --global-name=VonderaSDK --outfile=dist/browser/vondera-sdk.iife.js && esbuild src/index.ts --bundle --platform=browser --format=iife --global-name=VonderaSDK --outfile=examples/browser/sdk.bundle.js && esbuild src/index.ts --bundle --platform=browser --format=esm --outfile=dist/browser/vondera-sdk.mjs --target=es2020",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "lint": "echo \"No linter configured\"",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "vondera",
+    "sdk",
+    "api"
+  ],
+  "author": "Vondera",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "axios-mock-adapter": "^1.21.2",
+    "esbuild": "^0.18.0",
+    "tsup": "^6.7.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.4.0"
+  },
+  "dependencies": {
+    "axios": "^1.5.0"
+  }
+}

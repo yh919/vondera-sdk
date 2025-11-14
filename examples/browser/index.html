@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Vondera SDK - Browser Example</title>
+    <style>
+      body {
+        font-family: system-ui, Segoe UI, Roboto, Arial;
+        margin: 20px;
+      }
+      pre {
+        white-space: pre-wrap;
+        background: #f6f8fa;
+        padding: 12px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Vondera SDK — Browser Example</h1>
+    <p>
+      This demo performs a public `GET /products` request using `fetch` and the
+      `x-api-key` header.
+    </p>
+    <p>
+      <strong>Important:</strong> copy `config.example.js` to `config.js` and
+      set your API key before running.
+    </p>
+    <div id="status">Initializing…</div>
+    <pre id="output"></pre>
+    <!-- Load the bundled SDK (build with `npm run build:browser`) -->
+    <script src="./sdk.bundle.js"></script>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
