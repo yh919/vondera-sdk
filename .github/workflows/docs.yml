@@ -28,6 +28,7 @@ jobs:
         run: |
           mkdir -p public
           cp -r examples/browser/* public/
+          touch public/.nojekyll
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
