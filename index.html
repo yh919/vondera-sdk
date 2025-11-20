@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Vondera SDK Documentation & Live API Explorer</title>
+    <style>
+      body {
+        font-family: system-ui, Segoe UI, Roboto, Arial;
+        margin: 0;
+        background: #f8fafc;
+        color: #222;
+      }
+      header {
+        background: #1a2233;
+        color: #fff;
+        padding: 2rem 1rem 1rem 1rem;
+        margin-bottom: 2rem;
+      }
+      h1 {
+        margin: 0 0 0.5rem 0;
+        font-size: 2.2rem;
+      }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 1rem 2rem 1rem;
+      }
+      .endpoint {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px #0001;
+        margin-bottom: 2rem;
+        padding: 1.5rem 1.5rem 1rem 1.5rem;
+      }
+      .endpoint h2 {
+        margin-top: 0;
+      }
+      .endpoint pre {
+        background: #f6f8fa;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 0.98em;
+        margin: 0.5em 0 1em 0;
+      }
+      .endpoint label {
+        font-weight: 500;
+      }
+      .endpoint input,
+      .endpoint select,
+      .endpoint textarea {
+        font-family: inherit;
+        font-size: 1em;
+        margin: 0.2em 0 1em 0;
+        padding: 0.4em 0.6em;
+        border-radius: 4px;
+        border: 1px solid #bbb;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .endpoint button {
+        background: #1a2233;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 0.5em 1.2em;
+        font-size: 1em;
+        cursor: pointer;
+        margin-bottom: 1em;
+      }
+      .endpoint button:disabled {
+        background: #aaa;
+        cursor: not-allowed;
+      }
+      .endpoint .response {
+        background: #f6f8fa;
+        border-radius: 6px;
+        padding: 10px;
+        margin-top: 0.5em;
+        font-size: 0.97em;
+        color: #222;
+        min-height: 2em;
+      }
+      .endpoint .types {
+        font-size: 0.95em;
+        color: #444;
+        margin-bottom: 0.5em;
+      }
+      .endpoint .example {
+        font-size: 0.95em;
+        color: #666;
+        margin-bottom: 0.5em;
+      }
+      .endpoint .method {
+        display: inline-block;
+        font-weight: bold;
+        color: #fff;
+        background: #1a2233;
+        border-radius: 4px;
+        padding: 0.1em 0.7em;
+        margin-right: 0.5em;
+        font-size: 0.95em;
+      }
+      .endpoint .path {
+        font-family: monospace;
+        color: #1a2233;
+        font-size: 1.05em;
+      }
+      .endpoint .desc {
+        margin-bottom: 0.5em;
+      }
+      .endpoint .try {
+        margin-top: 1em;
+      }
+      .endpoint .response-label {
+        font-weight: 500;
+        margin-bottom: 0.2em;
+      }
+      .endpoint .error {
+        color: #b00;
+        font-weight: 500;
+      }
+      .endpoint .success {
+        color: #0a0;
+        font-weight: 500;
+      }
+      .endpoint .note {
+        color: #555;
+        font-size: 0.95em;
+        margin-bottom: 0.5em;
+      }
+      .endpoint .param-row {
+        display: flex;
+        gap: 1em;
+        align-items: center;
+        margin-bottom: 0.5em;
+      }
+      .endpoint .param-row label {
+        min-width: 80px;
+      }
+      /* --- Response Box Styling --- */
+      .resp-box {
+        background: #f6f8fa;
+        border-radius: 6px;
+        padding: 12px 14px;
+        margin: 0.5em 0 1em 0;
+        font-size: 1em;
+        font-family: "Fira Mono", "Consolas", "Menlo", monospace;
+        overflow-x: auto;
+        border: 1px solid #e0e0e0;
+        word-break: break-word;
+      }
+      .resp-box.success {
+        border-left: 4px solid #0a0;
+        background: #f6fff6;
+        color: #1a3a1a;
+      }
+      .resp-box.error {
+        border-left: 4px solid #b00;
+        background: #fff6f6;
+        color: #3a1a1a;
+      }
+      .loading {
+        color: #888;
+        font-style: italic;
+      }
+      /* --- JSON Syntax Highlighting --- */
+      .json-key {
+        color: #1a2233;
+        font-weight: bold;
+      }
+      .json-string {
+        color: #0a6;
+      }
+      .json-number {
+        color: #06c;
+      }
+      .json-boolean {
+        color: #b06;
+      }
+      .json-null {
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div
+        style="
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+        "
+      >
+        <div>
+          <h1>Vondera SDK API Documentation & Live Explorer</h1>
+          <div>
+            Interact with the Vondera Public API endpoints, see request/response
+            types, and try real requests in your browser.
+          </div>
+          <div style="margin-top: 0.5em; font-size: 1em">
+            <b>Note:</b> You must provide your <code>x-api-key</code> (store API
+            key) to make live requests.
+          </div>
+        </div>
+        <form
+          id="api-key-form"
+          style="
+            margin-left: 2em;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+          "
+        >
+          <label for="api-key-input" style="font-weight: 500">API Key:</label>
+          <input
+            type="text"
+            id="api-key-input"
+            placeholder="Your API Key"
+            style="width: 220px"
+          />
+          <button type="submit" style="padding: 0.4em 1.2em">Set</button>
+        </form>
+      </div>
+    </header>
+    <div class="container">
+      <div id="api-docs"></div>
+    </div>
+    <script src="./sdk.bundle.js"></script>
+    <script src="./types.js"></script>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
