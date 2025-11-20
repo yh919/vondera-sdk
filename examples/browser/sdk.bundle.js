@@ -2646,9 +2646,10 @@ var VonderaSDK = (() => {
   } = axios_default;
 
   // src/http.ts
+  var DEFAULT_BASE_URL = typeof process !== "undefined" && process.env && process.env.VONDERA_API_BASE ? process.env.VONDERA_API_BASE : "https://us-central1-brands-61c3d.cloudfunctions.net/app-api/api/public";
   function createHttpClient(options) {
     const instance = axios_default.create({
-      baseURL: options.baseURL || process.env.VONDERA_API_BASE || "",
+      baseURL: DEFAULT_BASE_URL,
       timeout: options.timeout ?? 15e3,
       headers: {
         "Content-Type": "application/json"
@@ -2784,7 +2785,15 @@ var VonderaSDK = (() => {
     constructor(options) {
       if (!options || !options.apiKey)
         throw new Error("ApiClient requires an apiKey");
-      this.http = createHttpClient(options);
+      if (options.baseURL) {
+        console.warn(
+          "'baseURL' option is ignored \u2014 the vondera-sdk uses a package-default base URL."
+        );
+      }
+      this.http = createHttpClient({
+        apiKey: options.apiKey,
+        timeout: options.timeout
+      });
       this.wishlist = new WishlistEndpoint(this.http);
       this.products = new ProductsEndpoint(this.http);
       this.categories = new CategoriesEndpoint(this.http);

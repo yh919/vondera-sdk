@@ -17,8 +17,9 @@ export type HttpOptions = {
  * @returns AxiosInstance
  */
 const DEFAULT_BASE_URL =
-  process.env.VONDERA_API_BASE ||
-  "https://us-central1-brands-61c3d.cloudfunctions.net/app-api/api/public";
+  typeof process !== "undefined" && process.env && process.env.VONDERA_API_BASE
+    ? process.env.VONDERA_API_BASE
+    : "https://us-central1-brands-61c3d.cloudfunctions.net/app-api/api/public";
 
 /**
  * Create a configured Axios instance with interceptors and unified error handling.
