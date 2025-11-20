@@ -2657,7 +2657,8 @@ var VonderaSDK = (() => {
     });
     instance.interceptors.request.use((config) => {
       config.headers = config.headers || {};
-      config.headers["x-api-key"] = options.apiKey;
+      let safeApiKey = options.apiKey ? String(options.apiKey).replace(/[^\x00-\xFF]/g, "?") : "";
+      config.headers["x-api-key"] = safeApiKey;
       return config;
     });
     instance.interceptors.response.use(

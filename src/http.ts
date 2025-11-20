@@ -40,7 +40,12 @@ export function createHttpClient(options: HttpOptions): AxiosInstance {
   // Request interceptor: attach API key
   instance.interceptors.request.use((config) => {
     config.headers = config.headers || {};
-    config.headers["x-api-key"] = options.apiKey;
+    // Ensure API key is a valid ISO-8859-1 string (ASCII only)
+    // Remove or replace any non-ISO-8859-1 characters
+    let safeApiKey = options.apiKey
+      ? String(options.apiKey).replace(/[^\x00-\xFF]/g, "?")
+      : "";
+    config.headers["x-api-key"] = safeApiKey;
     return config;
   });
 
