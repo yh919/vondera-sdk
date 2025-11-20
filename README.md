@@ -70,22 +70,27 @@ for advanced customization (interceptors, timeouts, etc.).
 `ApiClient`. The package uses a built-in default base URL or the
 `VONDERA_API_BASE` environment variable when present.
 
+**Features:**
+
+- All endpoints grouped by resource (Products, Categories, Wishlist, Auth, Orders, Cart, Custom Pages, Store)
+- See request/response types and example payloads
+- Try endpoints live (requires your store API key)
+- See real responses and errors
+
+The docs UI is auto-deployed to GitHub Pages on every push to `main`.
+
+- `isAxios` — true for HTTP-related errors
+
 ## API surface (high level)
 
 - `client.auth` — authentication helpers (login, signup)
 - `client.products` — list, getById, featured, reviews, addReview
 - `client.categories` — list, getById
 - `client.wishlist` — add, get, remove
-
-## Error handling
-
-When requests fail, the SDK throws an `Error` that may include extra fields:
-
-- `isAxios` — true for HTTP-related errors
-- `status` — HTTP status code if available
-- `data` — response body from the server when available
-
-Example:
+- `client.orders` — list, getById, calculatePrice, create
+- `client.cart` — get, add, update, remove, clear
+- `client.customPages` — list, getById
+- `client.store` — get
 
 ```ts
 try {
