@@ -399,11 +399,11 @@ function renderEndpoint(endpoint, client) {
 
     btn.onclick = async () => {
       btn.disabled = true;
-      respDiv.textContent = "Loading...";
+      respDiv.innerHTML = '<span class="loading">Loading...</span>';
       respDiv.classList.remove("error", "success");
       let apiKey = VONDERA_API_KEY;
       if (!apiKey) {
-        respDiv.textContent = "API key required (set at top right).";
+        respDiv.innerHTML = `<div class="resp-box error">API key required (set at top right).</div>`;
         respDiv.classList.add("error");
         btn.disabled = false;
         return;
@@ -422,7 +422,7 @@ function renderEndpoint(endpoint, client) {
           const bodyVal = form.querySelector(`[name='body']`).value;
           Object.assign(params, JSON.parse(bodyVal));
         } catch (e) {
-          respDiv.textContent = "Invalid JSON in body.";
+          respDiv.innerHTML = `<div class="resp-box error">Invalid JSON in body.</div>`;
           respDiv.classList.add("error");
           btn.disabled = false;
           return;
@@ -433,20 +433,53 @@ function renderEndpoint(endpoint, client) {
       try {
         client = new window.VonderaSDK.ApiClient({ apiKey });
       } catch (e) {
-        respDiv.textContent = "Failed to initialize SDK: " + e;
+        respDiv.innerHTML = `<div class="resp-box error">Failed to initialize SDK: ${e}</div>`;
         respDiv.classList.add("error");
         btn.disabled = false;
         return;
       }
       try {
         const result = await endpoint.sdkCall(client, params);
-        respDiv.textContent = JSON.stringify(result, null, 2);
+        respDiv.innerHTML = `<pre class="resp-box success"><code>${syntaxHighlightJson(
+          result
+        )}</code></pre>`;
         respDiv.classList.add("success");
       } catch (e) {
-        respDiv.textContent = e?.message || String(e);
+        let msg = e && e.message ? e.message : String(e);
+        let details =
+          e && e.data ? `<pre>${syntaxHighlightJson(e.data)}</pre>` : "";
+        respDiv.innerHTML = `<div class="resp-box error">${msg}${details}</div>`;
         respDiv.classList.add("error");
       }
       btn.disabled = false;
+      // --- Syntax highlighting for JSON ---
+      function syntaxHighlightJson(json) {
+        if (typeof json !== "string") {
+          json = JSON.stringify(json, null, 2);
+        }
+        json = json
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+        return json.replace(
+          /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+          function (match) {
+            let cls = "number";
+            if (/^"/.test(match)) {
+              if (/:$/.test(match)) {
+                cls = "key";
+              } else {
+                cls = "string";
+              }
+            } else if (/true|false/.test(match)) {
+              cls = "boolean";
+            } else if (/null/.test(match)) {
+              cls = "null";
+            }
+            return `<span class="json-${cls}">${match}</span>`;
+          }
+        );
+      }
     };
 
     tryDiv.appendChild(form);

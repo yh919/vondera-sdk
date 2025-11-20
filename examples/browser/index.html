@@ -138,6 +138,49 @@
       .endpoint .param-row label {
         min-width: 80px;
       }
+      /* --- Response Box Styling --- */
+      .resp-box {
+        background: #f6f8fa;
+        border-radius: 6px;
+        padding: 12px 14px;
+        margin: 0.5em 0 1em 0;
+        font-size: 1em;
+        font-family: "Fira Mono", "Consolas", "Menlo", monospace;
+        overflow-x: auto;
+        border: 1px solid #e0e0e0;
+        word-break: break-word;
+      }
+      .resp-box.success {
+        border-left: 4px solid #0a0;
+        background: #f6fff6;
+        color: #1a3a1a;
+      }
+      .resp-box.error {
+        border-left: 4px solid #b00;
+        background: #fff6f6;
+        color: #3a1a1a;
+      }
+      .loading {
+        color: #888;
+        font-style: italic;
+      }
+      /* --- JSON Syntax Highlighting --- */
+      .json-key {
+        color: #1a2233;
+        font-weight: bold;
+      }
+      .json-string {
+        color: #0a6;
+      }
+      .json-number {
+        color: #06c;
+      }
+      .json-boolean {
+        color: #b06;
+      }
+      .json-null {
+        color: #888;
+      }
     </style>
   </head>
   <body>
